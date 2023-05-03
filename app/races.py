@@ -4,7 +4,7 @@ from datetime import datetime
 # Creating model table for our CRUD database
 class Race(db.Model):
    __tablename__ = "race"
-   id = db.Column(db.Integer, primary_key=True)
+   id = db.Column(db.Integer, primary_key=True, autoincrement=True)
    name = db.Column(db.String(50))
    time = db.Column(db.DateTime, default=datetime.utcnow)
    city = db.Column(db.String(20))
