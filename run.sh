@@ -1,2 +1,2 @@
-export FLASK_APP=races.py
+export FLASK_APP=races
 flask run
