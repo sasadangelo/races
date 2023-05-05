@@ -4,38 +4,39 @@
 {% block title %} Gare Podistiche {% endblock %}
 
 {% block body %}
-<div class="container">
-    <div class="row">
-        <div class="col md-12">
-            <div class="bg-light p-3">
-                <h2>Gare Podistiche di <b>Roma e Provincia</b> <button type="button"  class="btn btn-success float-right"
-                                               data-toggle="modal" data-target="#mymodal">Aggiungi Gara</button>
-                </h2>
-                <table class="table table-hover table-dark">
-                    <tr>
-                        <th>Data</th>
-                        <th>Ora</th>
-                        <th>Nome</th>
-                        <th>Città</th>
-                        <th>Distanza</th>
-                        <th>Sito Web</th>
-                    </tr>
-                    {% for row in races %}
-                    <tr>
-                        <td>{{row.time}}</td>
-                        <td>{{row.time}}</td>
-                        <td>{{row.name}}</td>
-                        <td>{{row.city}}</td>
-                        <td>{{row.distance}}</td>
-                        <td>{{row.website}}</td>
-                        <td>
-                            <a href="" class="btn btn-warning btn-xs" data-toggle="modal" data-target="">Edit</a>
-                            <a href="" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure To Delete ?')">Delete</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </table>
-        </div>
+<div id="page">
+    <div id="page-content">
+        <h2>Gare Podistiche di <b>Roma e Provincia</b> <button type="button"  class="btn btn-success float-right" data-toggle="modal" data-target="#mymodal">Aggiungi Gara</button></h2>
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Ora</th>
+                    <th>Nome</th>
+                    <th>Città</th>
+                    <th>Distanza</th>
+                    <th>Sito Web</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for row in races %}
+                <tr>
+                    <td>{{row.time.strftime('%Y-%m-%d')}}</td>
+                    <td>{{row.time.strftime('%H:%M')}}</td>
+                    <td>{{row.name}}</td>
+                    <td>{{row.city}}</td>
+                    <td>{{row.distance}}</td>
+                    <td>{{row.website}}</td>
+                    <td>
+                        <a href="" class="btn btn-warning btn-xs" data-toggle="modal" data-target="">Edit</a>
+                        <a href="" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure To Delete ?')">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            <tbody>
+        </table>
     </div>
 </div>
 
