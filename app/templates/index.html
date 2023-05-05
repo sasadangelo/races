@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% include 'header.html' %}
 
-{% block title %} Home {% endblock %}
+{% block title %} Gare Podistiche {% endblock %}
 
 {% block body %}
 <div class="container">
@@ -20,7 +20,7 @@
                         <th>Distanza</th>
                         <th>Sito Web</th>
                     </tr>
-                    {% for row in etfs %}
+                    {% for row in races %}
                     <tr>
                         <td>{{row.time}}</td>
                         <td>{{row.time}}</td>

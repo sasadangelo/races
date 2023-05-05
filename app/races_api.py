@@ -4,8 +4,15 @@ from .races import Race
 from . import db
 from flask import jsonify, request, abort
 from datetime import datetime
+from flask import render_template
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
+
+@app.route('/')
+def index():
+    races = Race.query.all()
+    print(races)
+    return render_template("index.html", races = races)
 
 @app.route("/races", methods=["GET"])
 def get_races():
@@ -49,12 +56,19 @@ def create_race():
 def update_race(id):
     if not request.json:
         abort(400)
-    race = race.query.get(id)
+
+    race = Race.query.get(id)
     if race is None:
         abort(404)
-    race.id=request.json.get('id')
+
+    # Controllo formato data
+    try:
+        datetime.strptime(request.json.get('time'), "%d/%m/%Y %H:%M")
+    except ValueError:
+        abort(400, "Formato data non valido. Utilizzare il formato gg/mm/aaaa hh:mm.")
+
     race.name=request.json.get('name')
-    race.time=request.json.get('time')
+    race.time=datetime.strptime(request.json.get('time'), "%d/%m/%Y %H:%M")
     race.city=request.json.get('city')
     race.distance=request.json.get('distance')
     race.website=request.json.get('website')
