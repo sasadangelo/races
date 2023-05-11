@@ -2,30 +2,16 @@ import os
 from . import create_app
 from .races import Race
 from . import db
-from flask import jsonify, request, abort
+from flask import jsonify, request, abort, render_template, redirect, url_for
 from datetime import datetime
-from flask import render_template
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 
 @app.route('/')
-def index():
-    races = Race.query.all()
-    print(races)
-    return render_template("index.html", races = races)
-
 @app.route("/races", methods=["GET"])
 def get_races():
     races = Race.query.all()
-    return jsonify([race.to_json() for race in races])
-
-@app.route("/race/<int:id>", methods=["GET"])
-def get_race(id):
-    race = Race.query.get(id)
-    if race is None:
-        abort(404)
-    return jsonify(race.to_json())
-
+    return render_template("index.html", races = races)
 
 @app.route("/race/<int:id>", methods=["DELETE"])
 def delete_race(id):
@@ -34,43 +20,53 @@ def delete_race(id):
         abort(404)
     db.session.delete(race)
     db.session.commit()
-    return jsonify({'result': True})
 
-@app.route('/race', methods=['POST'])
+    # Reindirizza l'utente alla pagina delle gare
+    return redirect(url_for('get_races'))
+
+@app.route('/create-race', methods=['GET', 'POST'])
 def create_race():
-    if not request.json:
-        abort(400)
+    if request.method == 'GET':
+        return render_template('add-race.html')
+
+    date_string = request.form['date']
+    time_string = request.form['time']
+    datetime_string = date_string + ' ' + time_string
+
     race = Race(
-        id=request.json.get('id'),
-        name=request.json.get('name'),
-        time=datetime.strptime(request.json.get('time'), "%d/%m/%Y %H:%M"),
-        city=request.json.get('city'),
-        distance=request.json.get('distance'),
-        website=request.json.get('website')
+        name=request.form['name'],
+        time=datetime.strptime(datetime_string, "%Y-%m-%d %H:%M"),
+        city=request.form['city'],
+        distance=request.form['distance'],
+        website=request.form['website']
     )
     db.session.add(race)
     db.session.commit()
-    return jsonify(race.to_json()), 201
 
-@app.route('/race/<int:id>', methods=['PUT'])
+    # Reindirizza l'utente alla pagina delle gare
+    return redirect(url_for('get_races'))
+
+@app.route('/update-race/<int:id>', methods=['GET', 'POST'])
 def update_race(id):
-    if not request.json:
-        abort(400)
-
     race = Race.query.get(id)
     if race is None:
         abort(404)
 
-    # Controllo formato data
-    try:
-        datetime.strptime(request.json.get('time'), "%d/%m/%Y %H:%M")
-    except ValueError:
-        abort(400, "Formato data non valido. Utilizzare il formato gg/mm/aaaa hh:mm.")
+    if request.method == 'GET':
+        return render_template('update-race.html', race = race)
 
-    race.name=request.json.get('name')
-    race.time=datetime.strptime(request.json.get('time'), "%d/%m/%Y %H:%M")
-    race.city=request.json.get('city')
-    race.distance=request.json.get('distance')
-    race.website=request.json.get('website')
+    date_string = request.form['date']
+    time_string = request.form['time']
+    print(date_string)
+    print(time_string)
+    datetime_string = date_string + ' ' + time_string
+
+    race.name=request.form['name']
+    race.time=datetime.strptime(datetime_string, "%Y-%m-%d %H:%M")
+    race.city=request.form['city']
+    race.distance=request.form['distance']
+    race.website=request.form['website']
     db.session.commit()
-    return jsonify(race.to_json())
+
+    # reindirizza l'utente alla pagina delle gare
+    return redirect(url_for('get_races'))

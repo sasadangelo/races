@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+
+{% block title %} Aggiungi Gara Podistica {% endblock %}
+
+{% block body %}
+<div id="page">
+    <div id="page-content">
+        <h2>Aggiungi Gara Podistica</h2>
+        <form method="POST" action="/create-race">
+            <label id="icon" for="name"><i class="fas fa-user"></i></label>
+            <label for="name">Nome Gara:</label><br>
+            <input type="text" name="name" id="name" placeholder="Nome Gara" required/>
+            <label for="date">Data:</label><br>
+            <input type="date" name="date" placeholder="Data" class="input" />
+            <label for="time">Ora:</label><br>
+            <input type="time" name="time" placeholder="Ora" class="input" />
+            <label for="city">Città:</label><br>
+            <input type="text" name="city" placeholder="Città" class="input" />
+            <label for="date">Data:</label><br>
+            <input type="text" name="distance" placeholder="Distanza" class="input" />
+            <label for="date">Data:</label><br>
+            <input type="url"  name="website" placeholder="Sito Web" class="input" />
+            <button>Aggiungi</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // ottieni il riferimento all'elemento input della data
+    const dateInput = document.getElementById('date');
+    
+    // ottieni la data nel formato YYYY-MM-DD
+    const dateValue = dateInput.value;
+    
+    // formatta la data nel formato DD/MM/YYYY
+    const formattedDate = new Date(dateValue).toLocaleDateString('it-IT');
+    
+    // imposta il valore dell'input con la data formattata
+    dateInput.value = formattedDate;
+  </script>
+
+{% endblock %}

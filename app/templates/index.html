@@ -6,7 +6,7 @@
 {% block body %}
 <div id="page">
     <div id="page-content">
-        <h2>Gare Podistiche di <b>Roma e Provincia</b> <button type="button"  class="btn btn-success float-right" data-toggle="modal" data-target="#mymodal">Aggiungi Gara</button></h2>
+        <h2>Gare Podistiche di <b>Roma e Provincia</b> <button type="button"  class="btn btn-success float-right" onclick="window.location.href='/create-race'">Aggiungi Gara</button></h2>
         <table class="styled-table">
             <thead>
                 <tr>
@@ -30,8 +30,8 @@
                     <td>{{row.distance}}</td>
                     <td>{{row.website}}</td>
                     <td>
-                        <a href="" class="btn btn-warning btn-xs" data-toggle="modal" data-target="">Edit</a>
-                        <a href="" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure To Delete ?')">Delete</a>
+                        <a href="/update-race/{{row.id}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="">Edit</a>
+                        <a href="/delete-race/{{row.id}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure To Delete ?')">Delete</a>
                     </td>
                 </tr>
             {% endfor %}

@@ -21,9 +21,8 @@ class Race(db.Model):
          'website': self.website
       }
 
-   def __init__(self, id, name, time, city,
+   def __init__(self, name, time, city,
                       distance, website):
-       self.id = id
        self.name = name
        self.time = time
        self.city = city

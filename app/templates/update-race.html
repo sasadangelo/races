@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+
+{% block title %} Modifica Gara Podistica {% endblock %}
+
+{% block body %}
+<div id="page">
+    <div id="page-content">
+        <h2>Modifica Gara Podistica</h2>
+        <form method="POST" action="/update-race/{{race.id}}">
+            <label id="icon" for="name"><i class="fas fa-user"></i></label>
+            <label for="name">Nome Gara:</label>
+            <input type="text" name="name" id="name" placeholder="Nome Gara" value="{{race.name}}" required/><br>
+            <label for="date">Data:</label>
+            <input type="date" name="date" placeholder="Data" class="input" value="{{race.time.strftime('%Y-%m-%d')}}"/><br>
+            <label for="time">Ora:</label>
+            <input type="time" name="time" placeholder="Ora" class="input" value="{{race.time.strftime('%H:%M')}}"/><br>
+            <label for="city">Città:</label>
+            <input type="text" name="city" placeholder="Città" class="input" value="{{race.city}}"/><br>
+            <label for="date">Distanza:</label>
+            <input type="text" name="distance" placeholder="Distanza" class="input" value="{{race.distance}}"/><br>
+            <label for="date">Sito Web:</label>
+            <input type="url"  name="website" placeholder="Sito Web" class="input" value="{{race.website}}"/><br>
+            <button>Modifica</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // ottieni il riferimento all'elemento input della data
+    const dateInput = document.getElementById('date');
+    
+    // ottieni la data nel formato YYYY-MM-DD
+    const dateValue = dateInput.value;
+    
+    // formatta la data nel formato DD/MM/YYYY
+    const formattedDate = new Date(dateValue).toLocaleDateString('it-IT');
+    
+    // imposta il valore dell'input con la data formattata
+    dateInput.value = formattedDate;
+  </script>
+
+{% endblock %}
