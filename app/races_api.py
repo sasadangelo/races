@@ -13,7 +13,7 @@ def get_races():
     races = Race.query.all()
     return render_template("index.html", races = races)
 
-@app.route("/race/<int:id>", methods=["DELETE"])
+@app.route("/delete-race/<int:id>", methods=['GET'])
 def delete_race(id):
     race = Race.query.get(id)
     if race is None:
