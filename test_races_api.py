@@ -2,7 +2,7 @@ import os
 import pytest
 import json
 from app import create_app, db
-from app.races import Race
+from app.models.races import Race
 
 os.environ['DATABASE_URL'] = 'sqlite:///test.db'
 
