@@ -4,6 +4,7 @@ from datetime import datetime
 from app.services.races_services import get_all_races, get_race_by_id, create_new_race, update_race, delete_race_by_id
 from app.services import races_services
 
+GET_RACES_ENDPOINT = 'races_blueprint.get_races'
 
 def get_races():
     races = get_all_races()
@@ -13,7 +14,7 @@ def delete_race(id):
     delete_race_by_id(id)
 
     # Reindirizza l'utente alla pagina delle gare
-    return redirect(url_for('races_blueprint.get_races'))
+    return redirect(url_for(GET_RACES_ENDPOINT))
 
 def create_race():
     if request.method == 'GET':
@@ -34,7 +35,7 @@ def create_race():
     create_new_race(race_data)
 
     # Reindirizza l'utente alla pagina delle gare
-    return redirect(url_for('races_blueprint.get_races'))
+    return redirect(url_for(GET_RACES_ENDPOINT))
 
 def update_race(id):
     race = get_race_by_id(id)
@@ -59,4 +60,4 @@ def update_race(id):
     races_services.update_race(id, race_data)
 
     # reindirizza l'utente alla pagina delle gare
-    return redirect(url_for('races_blueprint.get_races'))
+    return redirect(url_for(GET_RACES_ENDPOINT))

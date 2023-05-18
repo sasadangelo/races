@@ -6,23 +6,42 @@
 {% block body %}
 <div id="page">
     <div id="page-content">
-        <h2>Modifica Gara Podistica</h2>
-        <form method="POST" action="/update-race/{{race.id}}">
-            <label id="icon" for="name"><i class="fas fa-user"></i></label>
-            <label for="name">Nome Gara:</label>
-            <input type="text" name="name" id="name" placeholder="Nome Gara" value="{{race.name}}" required/><br>
-            <label for="date">Data:</label>
-            <input type="date" name="date" placeholder="Data" class="input" value="{{race.time.strftime('%Y-%m-%d')}}"/><br>
-            <label for="time">Ora:</label>
-            <input type="time" name="time" placeholder="Ora" class="input" value="{{race.time.strftime('%H:%M')}}"/><br>
-            <label for="city">Città:</label>
-            <input type="text" name="city" placeholder="Città" class="input" value="{{race.city}}"/><br>
-            <label for="date">Distanza:</label>
-            <input type="text" name="distance" placeholder="Distanza" class="input" value="{{race.distance}}"/><br>
-            <label for="date">Sito Web:</label>
-            <input type="url"  name="website" placeholder="Sito Web" class="input" value="{{race.website}}"/><br>
-            <button>Modifica</button>
-        </form>
+        <div id="create-race-form">
+            <div class="create-race-header-form">
+                <h2>Modifica Gara Podistica</h2>
+            </div>
+            <form method="POST" action="/update-race/{{race.id}}">
+                <div class="create-race-form-groups">
+                    <div class="input-group">
+                        <label for="name">Nome Gara:</label>
+                        <input type="text" name="name" id="name" placeholder="Nome Gara" size="40" value="{{race.name}}" required/>
+                    </div>
+                    <div class="input-group">
+                        <label for="date">Data:</label>
+                        <input type="date" name="date" placeholder="Data" class="input" value="{{race.time.strftime('%Y-%m-%d')}}"/>
+                    </div>
+                    <div class="input-group">
+                        <label for="time">Ora:</label>
+                        <input type="time" name="time" placeholder="Ora" class="input" value="{{race.time.strftime('%H:%M')}}"/>
+                    </div>
+                    <div class="input-group">
+                        <label for="city">Città:</label>
+                        <input type="text" name="city" placeholder="Città" size="40" class="input" value="{{race.city}}"/>
+                    </div>
+                    <div class="input-group">
+                        <label for="date">Distanza:</label>
+                        <input type="text" name="distance" placeholder="Distanza" size="40" class="input" value="{{race.distance}}"/>
+                    </div>
+                    <div class="input-group">
+                        <label for="website">Sito Web:</label>
+                        <input type="url"  name="website" placeholder="Sito Web" size="40" class="input" value="{{race.website}}"/>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-success">Modifica</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

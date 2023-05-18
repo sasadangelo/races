@@ -6,23 +6,42 @@
 {% block body %}
 <div id="page">
     <div id="page-content">
-        <h2>Aggiungi Gara Podistica</h2>
-        <form method="POST" action="/create-race">
-            <label id="icon" for="name"><i class="fas fa-user"></i></label>
-            <label for="name">Nome Gara:</label><br>
-            <input type="text" name="name" id="name" placeholder="Nome Gara" required/>
-            <label for="date">Data:</label><br>
-            <input type="date" name="date" placeholder="Data" class="input" />
-            <label for="time">Ora:</label><br>
-            <input type="time" name="time" placeholder="Ora" class="input" />
-            <label for="city">Città:</label><br>
-            <input type="text" name="city" placeholder="Città" class="input" />
-            <label for="date">Data:</label><br>
-            <input type="text" name="distance" placeholder="Distanza" class="input" />
-            <label for="date">Data:</label><br>
-            <input type="url"  name="website" placeholder="Sito Web" class="input" />
-            <button>Aggiungi</button>
-        </form>
+        <div id="create-race-form">
+            <div class="create-race-header-form">
+                <h2>Aggiungi Gara Podistica</h2>
+            </div>
+            <form method="POST" action="/create-race">
+                <div class="create-race-form-groups">
+                    <div class="input-group">
+                        <label for="name">Nome Gara:</label>
+                        <input type="text" name="name" id="name" placeholder="Nome Gara" size="40" required/>
+                    </div>
+                    <div class="input-group">
+                        <label for="date">Data:</label>
+                        <input type="date" name="date" placeholder="Data" class="input" />
+                    </div>
+                    <div class="input-group">
+                        <label for="time">Ora:</label>
+                        <input type="time" name="time" placeholder="Ora" class="input" />
+                    </div>
+                    <div class="input-group">
+                        <label for="city">Città:</label>
+                        <input type="text" name="city" placeholder="Città" size="40" class="input" />
+                    </div>
+                    <div class="input-group">
+                        <label for="date">Distanza:</label>
+                        <input type="text" name="distance" placeholder="Distanza" size="40" class="input" />
+                    </div>
+                    <div class="input-group">
+                        <label for="website">Sito Web:</label>
+                        <input type="url"  name="website" placeholder="Sito Web" size="40" class="input" />
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-success">Aggiungi</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
