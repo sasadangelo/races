@@ -23,7 +23,7 @@
             <tbody>
             {% for row in races %}
                 <tr>
-                    <td>{{row.time.strftime('%Y-%m-%d')}}</td>
+                    <td>{{row.time.strftime('%d-%m-%Y')}}</td>
                     <td>{{row.time.strftime('%H:%M')}}</td>
                     <td>{{row.name}}</td>
                     <td>{{row.city}}</td>
