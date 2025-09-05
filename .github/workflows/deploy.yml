@@ -1,10 +1,11 @@
 name: Deploy to PythonAnywhere
 
-# Trigger on push to main branch
+# Trigger on push to main branch OR manual trigger
 on:
   push:
     branches:
       - main
+  workflow_dispatch:   # consente il deploy manuale da GitHub Actions
 
 jobs:
   deploy:
@@ -19,7 +20,7 @@ jobs:
       - name: Deploy to PythonAnywhere
         uses: appleboy/ssh-action@v0.1.7
         with:
-          host: pythonanywhere.com
+          host: sasadangelo.pythonanywhere.com
           username: sasadangelo
           key: ${{ secrets.PYTHONANYWHERE_SSH_KEY }}
           port: 22
