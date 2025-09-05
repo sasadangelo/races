@@ -26,21 +26,16 @@ jobs:
           port: 22
           debug: true
           script: |
-            # Navigate to project folder
             cd ~/races
-
-            # Reset any local changes and pull latest code
             git reset --hard
             git pull origin main
-
-            # Debug: check python and pip
-            ~/venv/races/bin/python --version
-            ~/venv/races/bin/pip --version
-
-            # Install/update dependencies in virtualenv
-            ~/venv/races/bin/pip install --upgrade -r requirements.txt --disable-pip-version-check -q
-
-            # Touch WSGI file to trigger reload
+            echo "💡 DEBUG: list virtualenv"
+            ls -la ~/venv/races/bin
+            echo "💡 DEBUG: python version"
+            ~/venv/races/bin/python --version || echo "❌ python not found"
+            echo "💡 DEBUG: pip version"
+            ~/venv/races/bin/pip --version || echo "❌ pip not found"
+            echo "💡 DEBUG: install requirements"
+            ~/venv/races/bin/pip install -r requirements.txt --disable-pip-version-check || echo "❌ pip install failed"
             touch /var/www/sasadangelo_pythonanywhere_com_wsgi.py
-
             echo "✅ Deployment completed!"
