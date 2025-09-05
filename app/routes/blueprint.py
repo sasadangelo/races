@@ -1,12 +1,22 @@
+# -----------------------------------------------------------------------------
+# Copyright (c) 2025 Salvatore D'Angelo, Code4Projects
+# Licensed under the MIT License. See LICENSE.md for details.
+# -----------------------------------------------------------------------------
 from flask import Blueprint
-from ..controllers.races_controller import get_races, create_race, update_race, delete_race
+from app.controllers.races import RaceController
 
-races_blueprint = Blueprint('races_blueprint', __name__)
+races_blueprint = Blueprint("races_blueprint", __name__)
 
-races_blueprint.route('/', methods=['GET'])(get_races)
-races_blueprint.route('/races', methods=['GET'])(get_races)
-races_blueprint.route('/create-race', methods=['GET'])(create_race)
-races_blueprint.route('/create-race', methods=['POST'])(create_race)
-races_blueprint.route('/update-race/<int:id>', methods=['GET'])(update_race)
-races_blueprint.route('/update-race/<int:id>', methods=['POST'])(update_race)
-races_blueprint.route('/delete-race/<int:id>', methods=['GET'])(delete_race)
+# crea l'istanza del controller
+controller = RaceController()
+
+# registra le route usando i metodi dell'istanza
+races_blueprint.route("/", methods=["GET"])(controller.get_races)
+races_blueprint.route("/races", methods=["GET"])(controller.get_races)
+races_blueprint.route("/create-race", methods=["GET", "POST"])(controller.create_race)
+races_blueprint.route("/update-race/<int:race_id>", methods=["GET", "POST"])(
+    controller.update_race
+)
+races_blueprint.route("/delete-race/<int:race_id>", methods=["GET"])(
+    controller.delete_race
+)

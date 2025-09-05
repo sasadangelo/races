@@ -1,12 +1,18 @@
 {% extends 'base.html' %}
-{% include 'header.html' %}
 
-{% block title %} Gare Podistiche {% endblock %}
+{% block title %}Gare Podistiche{% endblock %}
 
 {% block body %}
+{% include 'header.html' %}
+
 <div id="page">
     <div id="page-content">
-        <h2>Gare Podistiche di <b>Roma e Provincia</b> <button type="button"  class="btn btn-success float-right" onclick="window.location.href='/create-race'">Aggiungi Gara</button></h2>
+        <h2>Gare Podistiche di <b>Roma e Provincia</b>
+            <button type="button" class="btn btn-success float-right"
+                onclick="window.location.href='{{ url_for('races_blueprint.create_race') }}'">
+                Aggiungi Gara
+            </button>
+        </h2>
         <table class="styled-table">
             <thead>
                 <tr>
@@ -21,23 +27,29 @@
                 </tr>
             </thead>
             <tbody>
-            {% for row in races %}
+                {% for race in races %}
                 <tr>
-                    <td>{{row.time.strftime('%d-%m-%Y')}}</td>
-                    <td>{{row.time.strftime('%H:%M')}}</td>
-                    <td>{{row.name}}</td>
-                    <td>{{row.city}}</td>
-                    <td>{{row.distance}}</td>
-                    <td><a href="{{row.website}}" target="_blank"><img src="{{url_for('static', filename='img/website.png')}}" alt="{{row.name}}"></a></td>
+                    <td>{{ race.time.strftime('%d-%m-%Y') }}</td>
+                    <td>{{ race.time.strftime('%H:%M') }}</td>
+                    <td>{{ race.name }}</td>
+                    <td>{{ race.city }}</td>
+                    <td>{{ race.distance }}</td>
                     <td>
-                        <a href="/update-race/{{row.id}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="">Edit</a>
-                        <a href="/delete-race/{{row.id}}" class="btn btn-danger btn-xs" onclick="return confirm('Sei sicuro di voler cancellare la Gara?')">Delete</a>
+                        <a href="{{ race.website }}" target="_blank">
+                            <img src="{{ url_for('static', filename='img/website.png') }}" alt="{{ race.name }}">
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('races_blueprint.update_race', race_id=race.id) }}"
+                            class="btn btn-warning btn-xs">Edit</a>
+                        <a href="{{ url_for('races_blueprint.delete_race', race_id=race.id) }}"
+                            class="btn btn-danger btn-xs"
+                            onclick="return confirm('Sei sicuro di voler cancellare la Gara?')">Delete</a>
                     </td>
                 </tr>
-            {% endfor %}
-            <tbody>
+                {% endfor %}
+            </tbody>
         </table>
     </div>
 </div>
-
 {% endblock %}

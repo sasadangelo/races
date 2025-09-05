@@ -10,19 +10,21 @@
             <div class="create-race-header-form">
                 <h2>Aggiungi Gara Podistica</h2>
             </div>
-            <form method="POST" action="/create-race">
+            <form method="POST" action="{{ url_for('races_blueprint.create_race') }}">
                 <div class="create-race-form-groups">
                     <div class="input-group">
                         <label for="name">Nome Gara:</label>
-                        <input type="text" name="name" id="name" placeholder="Nome Gara" size="40" required/>
+                        <input type="text" name="name" id="name" placeholder="Nome Gara" size="40" required />
                     </div>
                     <div class="input-group">
                         <label for="date">Data:</label>
-                        <input type="date" name="date" placeholder="Data" class="input" />
+                        <input type="date" name="date" class="input"
+                            value="{{ race.time.strftime('%Y-%m-%d') if race else '' }}">
                     </div>
                     <div class="input-group">
                         <label for="time">Ora:</label>
-                        <input type="time" name="time" placeholder="Ora" class="input" />
+                        <input type="time" name="time" class="input"
+                            value="{{ race.time.strftime('%H:%M') if race else '' }}">
                     </div>
                     <div class="input-group">
                         <label for="city">Città:</label>
@@ -34,7 +36,7 @@
                     </div>
                     <div class="input-group">
                         <label for="website">Sito Web:</label>
-                        <input type="url"  name="website" placeholder="Sito Web" size="40" class="input" />
+                        <input type="url" name="website" placeholder="Sito Web" size="40" class="input" />
                     </div>
                     <div class="button-group">
                         <button class="btn btn-success">Aggiungi</button>
@@ -44,19 +46,4 @@
         </div>
     </div>
 </div>
-
-<script>
-    // ottieni il riferimento all'elemento input della data
-    const dateInput = document.getElementById('date');
-    
-    // ottieni la data nel formato YYYY-MM-DD
-    const dateValue = dateInput.value;
-    
-    // formatta la data nel formato DD/MM/YYYY
-    const formattedDate = new Date(dateValue).toLocaleDateString('it-IT');
-    
-    // imposta il valore dell'input con la data formattata
-    dateInput.value = formattedDate;
-  </script>
-
 {% endblock %}
