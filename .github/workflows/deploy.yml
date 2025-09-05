@@ -24,6 +24,7 @@ jobs:
           username: sasadangelo
           key: ${{ secrets.PYTHONANYWHERE_SSH_KEY }}
           port: 22
+          debug: true
           script: |
             # Navigate to project folder
             cd ~/races
