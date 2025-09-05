@@ -6,17 +6,21 @@ from flask import Blueprint
 from app.controllers.races import RaceController
 
 races_blueprint = Blueprint("races_blueprint", __name__)
-
-# crea l'istanza del controller
 controller = RaceController()
 
-# registra le route usando i metodi dell'istanza
-races_blueprint.route("/", methods=["GET"])(controller.get_races)
-races_blueprint.route("/races", methods=["GET"])(controller.get_races)
-races_blueprint.route("/create-race", methods=["GET", "POST"])(controller.create_race)
-races_blueprint.route("/update-race/<int:race_id>", methods=["GET", "POST"])(
-    controller.update_race
+# GET routes
+races_blueprint.add_url_rule("/", view_func=controller.get_races, methods=["GET"])
+races_blueprint.add_url_rule("/races", view_func=controller.get_races, methods=["GET"])
+
+# Create / Update / Delete
+races_blueprint.add_url_rule(
+    "/create-race", view_func=controller.create_race, methods=["GET", "POST"]
 )
-races_blueprint.route("/delete-race/<int:race_id>", methods=["GET"])(
-    controller.delete_race
+races_blueprint.add_url_rule(
+    "/update-race/<int:race_id>",
+    view_func=controller.update_race,
+    methods=["GET", "POST"],
+)
+races_blueprint.add_url_rule(
+    "/delete-race/<int:race_id>", view_func=controller.delete_race, methods=["GET"]
 )

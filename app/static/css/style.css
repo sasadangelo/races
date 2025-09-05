@@ -1,71 +1,71 @@
 body {
-    margin: 0px;
-    font-family: 'Helvetica Neue';
-    font-size: 13px;
+  margin: 0px;
+  font-family: 'Helvetica Neue';
+  font-size: 13px;
 }
 
 h1 {
-    color: #4CAF50;
-    font-size: 28px;
-    text-align: center;
+  color: #4CAF50;
+  font-size: 28px;
+  text-align: center;
 }
 
 h2 {
-    color: #4CAF50;
-    font-size: 24px;
+  color: #4CAF50;
+  font-size: 24px;
 }
 
 #page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #page-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: left;
-    align-items: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: left;
 }
 
 .styled-table {
-    margin: auto;
-    border-collapse: collapse;
-    margin: 25px 0;
-    font-size: 0.9em;
-    font-family: sans-serif;
-    min-width: 400px;
-    border-radius: 5px 5px 0 0;
-    overflow: hidden;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  margin: auto;
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  min-width: 400px;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
 .styled-table thead tr {
-    background-color: #4CAF50;
-    color: #ffffff;
-    text-align: left;
+  background-color: #4CAF50;
+  color: #ffffff;
+  text-align: left;
 }
 
 .styled-table th,
 .styled-table td {
-    padding: 12px 15px;
+  padding: 12px 15px;
 }
 
 .styled-table tbody tr {
-    border-bottom: 1px solid #dddddd;
+  border-bottom: 1px solid #dddddd;
 }
 
 .styled-table tbody tr:nth-of-type(even) {
-    background-color: #f3f3f3;
+  background-color: #f3f3f3;
 }
 
 .styled-table tbody tr:last-of-type {
-    border-bottom: 2px solid #4CAF50;
+  border-bottom: 2px solid #4CAF50;
 }
 
 .styled-table tbody tr.active-row {
-    font-weight: bold;
-    color: #4CAF50;
+  font-weight: bold;
+  color: #4CAF50;
 }
 
 .btn {
@@ -87,7 +87,7 @@ h2 {
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-  
+
 .btn-xs {
   padding: 0.25rem 0.5rem;
   font-size: 0.875rem;
@@ -113,34 +113,38 @@ h2 {
   border-color: #bd2130;
 }
 
-.btn-danger:focus, .btn-danger.focus {
+.btn-danger:focus,
+.btn-danger.focus {
   box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.5);
 }
 
-.btn-danger.disabled, .btn-danger:disabled {
+.btn-danger.disabled,
+.btn-danger:disabled {
   color: #fff;
   background-color: #dc3545;
   border-color: #dc3545;
 }
-  
-.btn-danger:not(:disabled):not(.disabled):active, .btn-danger:not(:disabled):not(.disabled).active,
-.show > .btn-danger.dropdown-toggle {
+
+.btn-danger:not(:disabled):not(.disabled):active,
+.btn-danger:not(:disabled):not(.disabled).active,
+.show>.btn-danger.dropdown-toggle {
   color: #fff;
   background-color: #bd2130;
   border-color: #b21f2d;
 }
-  
-.btn-danger:not(:disabled):not(.disabled):active:focus, .btn-danger:not(:disabled):not(.disabled).active:focus,
-.show > .btn-danger.dropdown-toggle:focus {
+
+.btn-danger:not(:disabled):not(.disabled):active:focus,
+.btn-danger:not(:disabled):not(.disabled).active:focus,
+.show>.btn-danger.dropdown-toggle:focus {
   box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.5);
 }
-  
+
 .btn-success {
   color: #fff;
   background-color: #4CAF50;
   border-color: #4CAF50;
 }
-  
+
 .btn-success:hover {
   color: #fff;
   background-color: #218838;
@@ -158,7 +162,7 @@ h2 {
   background-color: #28a745;
   border-color: #28a745;
 }
-  
+
 #create-race-form {
   max-width: 400px;
   margin: 0 auto;
@@ -205,4 +209,37 @@ h2 {
   flex-direction: row;
   margin-left: auto;
   margin-right: auto;
+}
+
+/* Flash messages */
+.alert {
+  padding: 10px 20px;
+  /*margin-bottom: 20px;*/
+  border-radius: 4px;
+  font-size: 0.9rem;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.alert-success:hover {
+  background-color: #c3e6cb;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.alert-danger:hover {
+  background-color: #f5c6cb;
 }

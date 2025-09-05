@@ -7,6 +7,15 @@
 
 <div id="page">
     <div id="page-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ 'success' if category=='success' else 'danger' }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
         <div id="create-race-form">
             <div class="create-race-header-form">
                 <h2>Modifica Gara Podistica</h2>
