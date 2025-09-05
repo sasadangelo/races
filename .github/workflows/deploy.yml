@@ -1,0 +1,43 @@
+name: Deploy to PythonAnywhere
+
+# Trigger on push to main branch
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: deploy via SSH to PythonAnywhere
+      - name: Deploy to PythonAnywhere
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: pythonanywhere.com
+          username: sasadangelo
+          key: ${{ secrets.PYTHONANYWHERE_SSH_KEY }}
+          port: 22
+          script: |
+            # Navigate to project folder
+            cd ~/races
+
+            # Reset any local changes and pull latest code
+            git reset --hard
+            git pull origin main
+
+            # Activate virtualenv
+            source ~/venv/races/bin/activate
+
+            # Install/update dependencies
+            pip install -r requirements.txt
+
+            # Touch WSGI file to trigger reload
+            touch /var/www/sasadangelo_pythonanywhere_com_wsgi.py
+
+            echo "✅ Deployment completed!"
