@@ -20,7 +20,7 @@ jobs:
       - name: Deploy to PythonAnywhere
         uses: appleboy/ssh-action@v0.1.7
         with:
-          host: sasadangelo.pythonanywhere.com
+          host: ssh.pythonanywhere.com
           username: sasadangelo
           key: ${{ secrets.PYTHONANYWHERE_SSH_KEY }}
           port: 22
