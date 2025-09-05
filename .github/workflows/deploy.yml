@@ -32,8 +32,12 @@ jobs:
             git reset --hard
             git pull origin main
 
-            # Install/update dependencies
-            ~/venv/races/bin/pip install -r requirements.txt
+            # Debug: check python and pip
+            ~/venv/races/bin/python --version
+            ~/venv/races/bin/pip --version
+
+            # Install/update dependencies in virtualenv
+            ~/venv/races/bin/pip install --upgrade -r requirements.txt --disable-pip-version-check -q
 
             # Touch WSGI file to trigger reload
             touch /var/www/sasadangelo_pythonanywhere_com_wsgi.py
