@@ -5,3 +5,5 @@
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
+
+__all__ = ["create_app", "app", "db"]
