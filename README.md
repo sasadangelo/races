@@ -5,7 +5,7 @@ The app allows users to easily add, browse, and manage running events through a 
 
 ---
 
-## Technologies Used
+## Technologies Used
 
 [Flask](https://flask.palletsprojects.com/)
  – Python micro web framework
