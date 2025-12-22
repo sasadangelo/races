@@ -1,4 +1,25 @@
 {
     "javascript.validate.enable": false,
-    "vetur.validation.template": false
+    "vetur.validation.template": false,
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.diagnosticMode": "workspace",
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/.venv/lib/python3.13/site-packages"
+    ],
+    "editor.rulers": [
+        120
+    ],
+    "editor.wordWrapColumn": 120,
+    "[python]": {
+        "editor.rulers": [
+            120
+        ],
+        "editor.wordWrapColumn": 120
+    },
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Args": [
+        "--max-line-length=120"
+    ]
 }

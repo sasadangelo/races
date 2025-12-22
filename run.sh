@@ -5,8 +5,24 @@ if [ -d ".venv" ]; then
     source .venv/bin/activate
 fi
 
-# Set Flask app and run in debug mode
+# Set Flask app
 export FLASK_APP=races
-flask run --debug
+
+# Run Flask with configuration from config.yml
+python -c "
+from core import settings
+import os
+import sys
+
+# Get configuration values
+host = settings.app.host
+port = settings.app.port
+debug = '--debug' if settings.app.debug else ''
+
+# Run Flask
+cmd = f'flask run --host={host} --port={port} {debug}'
+print(f'Starting Flask app: {cmd}')
+os.system(cmd)
+"
 
 # Made with Bob
