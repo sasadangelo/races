@@ -5,61 +5,89 @@
 {% block body %}
 {% include 'header.html' %}
 
-<div id="page">
-    <div id="page-content">
-        <h2>Gare Podistiche di <b>Roma e Provincia</b>
-            <button type="button" class="btn btn-success float-right"
-                onclick="window.location.href='{{ url_for('races_blueprint.create_race') }}'">
-                Aggiungi Gara
-            </button>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary">
+            <i class="fas fa-list me-2"></i>
+            Gare Podistiche di <strong>Roma e Provincia</strong>
         </h2>
-        <!-- Messaggi flash -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        {% for category, message in messages %}
-        <div class="alert alert-{{ 'success' if category=='success' else 'danger' }}">
-            {{ message }}
-        </div>
-        {% endfor %}
-        {% endif %}
-        {% endwith %}
-        <table class="styled-table">
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Ora</th>
-                    <th>Nome</th>
-                    <th>Città</th>
-                    <th>Distanza</th>
-                    <th>Sito Web</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for race in races %}
-                <tr>
-                    <td>{{ race.time.strftime('%d-%m-%Y') }}</td>
-                    <td>{{ race.time.strftime('%H:%M') }}</td>
-                    <td>{{ race.name }}</td>
-                    <td>{{ race.city }}</td>
-                    <td>{{ race.distance }}</td>
-                    <td>
-                        <a href="{{ race.website }}" target="_blank">
-                            <img src="{{ url_for('static', filename='img/website.png') }}" alt="{{ race.name }}">
-                        </a>
-                    </td>
-                    <td>
-                        <a href="{{ url_for('races_blueprint.update_race', race_id=race.id) }}"
-                            class="btn btn-warning btn-xs">Edit</a>
-                        <a href="{{ url_for('races_blueprint.delete_race', race_id=race.id) }}"
-                            class="btn btn-danger btn-xs"
-                            onclick="return confirm('Sei sicuro di voler cancellare la Gara?')">Delete</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <button type="button" class="btn btn-success"
+            onclick="window.location.href='{{ url_for('races_blueprint.create_race') }}'">
+            <i class="fas fa-plus me-2"></i>Aggiungi Gara
+        </button>
     </div>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ 'success' if category=='success' else 'danger' }} alert-dismissible fade show"
+        role="alert">
+        <i class="fas fa-{{ 'check-circle' if category=='success' else 'exclamation-circle' }} me-2"></i>
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <!-- Races Table -->
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0">
+                    <thead class="table-primary">
+                        <tr>
+                            <th><i class="fas fa-calendar me-2"></i>Data</th>
+                            <th><i class="fas fa-clock me-2"></i>Ora</th>
+                            <th><i class="fas fa-trophy me-2"></i>Nome</th>
+                            <th><i class="fas fa-map-marker-alt me-2"></i>Città</th>
+                            <th><i class="fas fa-route me-2"></i>Distanza</th>
+                            <th><i class="fas fa-globe me-2"></i>Sito Web</th>
+                            <th class="text-center"><i class="fas fa-cog me-2"></i>Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for race in races %}
+                        <tr>
+                            <td>{{ race.time.strftime('%d-%m-%Y') }}</td>
+                            <td>{{ race.time.strftime('%H:%M') }}</td>
+                            <td><strong>{{ race.name }}</strong></td>
+                            <td>{{ race.city }}</td>
+                            <td><span class="badge bg-info text-dark">{{ race.distance }}</span></td>
+                            <td>
+                                <a href="{{ race.website }}" target="_blank" class="btn btn-sm btn-outline-primary"
+                                    title="Visita sito web">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group" role="group">
+                                    <a href="{{ url_for('races_blueprint.update_race', race_id=race.id) }}"
+                                        class="btn btn-sm btn-warning" title="Modifica">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{{ url_for('races_blueprint.delete_race', race_id=race.id) }}"
+                                        class="btn btn-sm btn-danger"
+                                        onclick="return confirm('Sei sicuro di voler cancellare la Gara?')"
+                                        title="Elimina">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    {% if races|length == 0 %}
+    <div class="alert alert-info mt-4 text-center" role="alert">
+        <i class="fas fa-info-circle me-2"></i>
+        Nessuna gara disponibile. Aggiungi la tua prima gara!
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
