@@ -6,4 +6,3 @@ app:
 
 database:
   relative_path: "instance/dev.db"
-# Made with Bob

@@ -4,7 +4,8 @@
 # -----------------------------------------------------------------------------
 import os
 from pathlib import Path
-from typing import Optional
+from typing import ClassVar
+
 import yaml
 from pydantic import Field
 from pydantic_settings import BaseSettings
@@ -15,13 +16,11 @@ class AppConfig(BaseSettings):
     """Application configuration settings."""
 
     debug: bool = Field(default=True, description="Debug mode")
-    host: str = Field(default="0.0.0.0", description="Host address")
+    host: str = Field(default="0.0.0.0", description="Host address")  # nosec B104
     port: int = Field(default=5001, description="Port number")
-    secret_key: Optional[str] = Field(
-        default=None, description="Secret key from environment"
-    )
+    secret_key: str | None = Field(default=None, description="Secret key from environment")
 
-    model_config: SettingsConfigDict = SettingsConfigDict(
+    model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(
         env_prefix="APP_",
         env_file=".env",
         env_file_encoding="utf-8",
@@ -32,13 +31,9 @@ class AppConfig(BaseSettings):
 class DatabaseConfig(BaseSettings):
     """Database configuration settings."""
 
-    relative_path: str = Field(
-        default="instance/dev.db", description="Relative path to database"
-    )
+    relative_path: str = Field(default="instance/dev.db", description="Relative path to database")
 
-    model_config: SettingsConfigDict = SettingsConfigDict(
-        env_prefix="DB_", extra="ignore"
-    )
+    model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(env_prefix="DB_", extra="ignore")
 
 
 class Settings(BaseSettings):
@@ -47,7 +42,7 @@ class Settings(BaseSettings):
     app: AppConfig
     database: DatabaseConfig
 
-    model_config: SettingsConfigDict = SettingsConfigDict(extra="ignore")
+    model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(extra="ignore")
 
     @classmethod
     def from_yaml(cls, config_path: str = "config.yml") -> "Settings":
@@ -57,7 +52,7 @@ class Settings(BaseSettings):
         if not yaml_path.exists():
             raise FileNotFoundError(f"Configuration file not found: {yaml_path}")
 
-        with open(file=yaml_path, mode="r") as f:
+        with open(file=yaml_path) as f:
             config_data = yaml.safe_load(stream=f)
 
         # Load secret_key from environment
@@ -72,7 +67,7 @@ class Settings(BaseSettings):
 
     def get_database_uri(self) -> str:
         """Get the full database URI."""
-        basedir: Path = Path(__file__).parent.parent
+        basedir: Path = Path(__file__).parent.parent.parent
         db_path: Path = basedir / self.database.relative_path
         return f"sqlite:///{db_path}"
 

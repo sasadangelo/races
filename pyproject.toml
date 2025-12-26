@@ -1,0 +1,64 @@
+[project]
+authors = [
+  {name = "Salvatore D'Angelo", email = "sasadangelo@gmail.com"},
+]
+dependencies = [
+  "Flask>=3.1.2",
+  "Flask-SQLAlchemy>=3.1.1",
+  "pydantic>=2.12.5",
+  "pydantic-settings>=2.12.0",
+  "PyYAML>=6.0.3",
+]
+description = "A Python application to manage running races"
+keywords = ["python", "running", "races"]
+name = "Races"
+readme = "README.md"
+requires-python = ">=3.10,<3.15"
+version = "0.1.0"
+
+[dependency-groups]
+dev = [
+  "bandit>=1.9.2",
+  "beautifulsoup4>=4.14.3",
+  "black>=25.12.0",
+  "coverage>=7.13.0",
+  "detect-secrets>=1.5.0",
+  "flake8>=7.3.0",
+  "isort>=7.0.0",
+  "mypy>=1.19.1",
+  "poethepoet>=0.39.0",
+  "pre-commit>=4.5.1",
+  "pytest>=9.0.2",
+  "radon>=6.0.1",
+  "types-beautifulsoup4>=4.12.0.20250516",
+  "types-pyyaml>=6.0.12",
+  "types-requests>=2.32.4.20250913",
+]
+
+[tool.isort]
+include_trailing_comma = true
+line_length = 120
+multi_line_output = 3
+profile = "black"
+skip = [".venv", "__pycache__", "build", "dist"]
+
+[tool.flake8]
+exclude = [".venv"]
+extend-ignore = ["E203", "W503"]
+max-line-length = 120
+
+[tool.black]
+exclude = '''
+/(
+    \.venv
+  | build
+  | dist
+  | __pycache__
+)/
+'''
+include = '\.pyi?$'
+line-length = 120
+target-version = ["py310"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]

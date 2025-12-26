@@ -10,7 +10,7 @@ export FLASK_APP=races
 
 # Run Flask with configuration from config.yml
 python -c "
-from core import settings
+from app.core import settings
 import os
 import sys
 
@@ -24,5 +24,3 @@ cmd = f'flask run --host={host} --port={port} {debug}'
 print(f'Starting Flask app: {cmd}')
 os.system(cmd)
 "
-
-# Made with Bob

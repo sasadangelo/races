@@ -2,95 +2,98 @@
 # Copyright (c) 2025 Salvatore D'Angelo, Code4Projects
 # Licensed under the MIT License. See LICENSE.md for details.
 # -----------------------------------------------------------------------------
-from datetime import datetime
-from flask import request, abort, render_template, redirect, url_for, flash
-from flask.wrappers import Response
-from pydantic import ValidationError
-from app.services import RaceService, RaceNotFoundError
-from app.dtos import Race
 import logging
+from datetime import datetime
+from typing import Any
+
+from flask import abort, flash, redirect, render_template, request, url_for
+from pydantic import ValidationError
+
+from app.controllers.types import WebResponse
+from app.dtos import Race
+from app.services import RaceNotFoundError, RaceService
 
 GET_RACES_ENDPOINT = "races_blueprint.get_races"
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(name=__name__)
 
 
 class RaceController:
-    def __init__(self):
+    def __init__(self) -> None:
         self.service = RaceService()
 
-    def get_races(self) -> Response:
+    def get_races(self) -> WebResponse:
         """Return the list of races."""
-        races = self.service.get_all_races()
-        return render_template("index.html", races=races)
+        races: list[Race] = self.service.get_all_races()
+        return render_template(template_name_or_list="index.html", races=races)
 
-    def delete_race(self, race_id: int) -> Response:
+    def delete_race(self, race_id: int) -> WebResponse:
         """Delete a race and redirect to the list."""
         try:
             self.service.delete_race_by_id(race_id)
-            flash("Gara cancellata con successo.", "success")
+            flash(message="Gara cancellata con successo.", category="success")
         except RaceNotFoundError:
-            flash("Gara non trovata.", "warning")
+            flash(message="Gara non trovata.", category="warning")
         except Exception as e:
-            logger.error(f"Error deleting race {race_id}: {e}")
-            flash("Errore del Server durante la cancellazione della gara.", "danger")
-        return redirect(url_for(GET_RACES_ENDPOINT))
+            logger.error(msg=f"Error deleting race {race_id}: {e}")
+            flash(message="Errore del Server durante la cancellazione della gara.", category="danger")
+        return redirect(location=url_for(endpoint=GET_RACES_ENDPOINT))
 
-    def create_race(self) -> Response:
+    def create_race(self) -> WebResponse:
         """Handle GET/POST to create a new race."""
         if request.method == "GET":
-            return render_template("create-race.html")
+            return render_template(template_name_or_list="create-race.html")
         return self._handle_race_form_submission(is_update=False)
 
-    def update_race(self, race_id: int) -> Response:
+    def update_race(self, race_id: int) -> WebResponse:
         """Update an existing race."""
         try:
-            race = self.service.get_race_by_id(race_id)
+            race: Race = self.service.get_race_by_id(race_id)
         except RaceNotFoundError:
-            flash("Gara non trovata.", "warning")
-            return redirect(url_for(GET_RACES_ENDPOINT))
+            flash(message="Gara non trovata.", category="warning")
+            return redirect(location=url_for(endpoint=GET_RACES_ENDPOINT))
 
         if request.method == "GET":
-            return render_template("update-race.html", race=race)
+            return render_template(template_name_or_list="update-race.html", race=race)
 
         return self._handle_race_form_submission(is_update=True, race_id=race_id)
 
-    def _handle_race_form_submission(
-        self, is_update: bool, race_id: int = None
-    ) -> Response:
+    def _handle_race_form_submission(self, is_update: bool, race_id: int | None = None) -> WebResponse:
         """Process form data for create or update operations."""
         try:
-            race_data = self._extract_race_data()
-            race_obj = Race(**race_data)  # Pydantic validation
+            race_data: dict[str, Any] = self._extract_race_data()
+            race_obj: Race = Race(**race_data)  # Pydantic validation
 
             if is_update:
-                self.service.update_race(race_id, race_obj)
-                flash("Gara aggiornata con successo.", "success")
+                if race_id is None:
+                    raise ValueError("race_id cannot be None for update operation")
+                self.service.update_race(race_id=race_id, race=race_obj)
+                flash(message="Gara aggiornata con successo.", category="success")
             else:
-                created_race = self.service.create_new_race(race_obj)
-                flash(f"Gara '{created_race.name}' creata con successo.", "success")
+                created_race: Race = self.service.create_new_race(race=race_obj)
+                flash(message=f"Gara '{created_race.name}' creata con successo.", category="success")
 
         except ValidationError as e:
-            logger.warning(f"Pydantic validation error: {e}")
-            flash("Dati della gara invalidi. Controlla i campi del modulo.", "warning")
+            logger.warning(msg=f"Pydantic validation error: {e}")
+            flash(message="Dati della gara invalidi. Controlla i campi del modulo.", category="warning")
         except RaceNotFoundError:
-            flash("Gara non trovata.", "warning")
+            flash(message="Gara non trovata.", category="warning")
         except Exception as e:
-            logger.error(f"Unexpected error processing race form: {e}")
-            flash("Errore del Server durante l'operazione.", "danger")
+            logger.error(msg=f"Unexpected error processing race form: {e}")
+            flash(message="Errore del Server durante l'operazione.", category="danger")
 
-        return redirect(url_for(GET_RACES_ENDPOINT))
+        return redirect(location=url_for(endpoint=GET_RACES_ENDPOINT))
 
-    def _extract_race_data(self) -> dict:
+    def _extract_race_data(self) -> dict[str, Any]:
         """Extract and validate form data, with minimal sanitization."""
         try:
-            date_string = request.form["date"].strip()
-            time_string = request.form["time"].strip()
-            datetime_string = f"{date_string} {time_string}"
+            date_string: str = request.form["date"].strip()
+            time_string: str = request.form["time"].strip()
+            datetime_string: str = f"{date_string} {time_string}"
 
-            name = request.form["name"].strip()
-            city = request.form["city"].strip()
-            distance = int(request.form["distance"])
-            website = request.form["website"].strip()
+            name: str = request.form["name"].strip()
+            city: str = request.form["city"].strip()
+            distance: int = int(request.form["distance"])
+            website: str = request.form["website"].strip()
 
             if distance <= 0:
                 raise ValueError("Distance must be greater than 0")
@@ -104,5 +107,6 @@ class RaceController:
             }
 
         except (KeyError, ValueError) as e:
-            logger.warning(f"Form parsing error: {e}")
+            logger.warning(msg=f"Form parsing error: {e}")
             abort(400, "Invalid form data")
+            raise  # This line is never reached but helps mypy understand abort() doesn't return

@@ -2,11 +2,13 @@
 # Copyright (c) 2025 Salvatore D'Angelo, Code4Projects
 # Licensed under the MIT License. See LICENSE.md for details.
 # -----------------------------------------------------------------------------
-from flask.app import Flask
 import secrets
+
+from flask.app import Flask
+
 from app import db
+from app.core import settings
 from app.routes.blueprint import races_blueprint
-from core import settings
 
 
 def create_app() -> Flask:
