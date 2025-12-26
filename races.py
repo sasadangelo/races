@@ -8,6 +8,7 @@ from flask.app import Flask
 
 from app import db
 from app.core import settings
+from app.core.log import setup_logging
 from app.routes.blueprint import races_blueprint
 
 
@@ -18,6 +19,16 @@ def create_app() -> Flask:
     Returns:
         Flask: Configured Flask app instance.
     """
+    # Initialize logging first
+    setup_logging(
+        level=settings.logging.level,
+        console=settings.logging.console,
+        file=settings.logging.file,
+        rotation=settings.logging.rotation,
+        retention=settings.logging.retention,
+        compression=settings.logging.compression,
+    )
+
     # Create the Flask app
     app: Flask = Flask(
         import_name=__name__,

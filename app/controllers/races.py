@@ -2,7 +2,6 @@
 # Copyright (c) 2025 Salvatore D'Angelo, Code4Projects
 # Licensed under the MIT License. See LICENSE.md for details.
 # -----------------------------------------------------------------------------
-import logging
 from datetime import datetime
 from typing import Any
 
@@ -10,16 +9,17 @@ from flask import abort, flash, redirect, render_template, request, url_for
 from pydantic import ValidationError
 
 from app.controllers.types import WebResponse
+from app.core.log import LoggerManager
 from app.dtos import Race
 from app.services import RaceNotFoundError, RaceService
 
 GET_RACES_ENDPOINT = "races_blueprint.get_races"
-logger = logging.getLogger(name=__name__)
 
 
 class RaceController:
     def __init__(self) -> None:
         self.service = RaceService()
+        self.logger = LoggerManager.get_logger(self.__class__.__name__)
 
     def get_races(self) -> WebResponse:
         """Return the list of races."""
@@ -34,7 +34,7 @@ class RaceController:
         except RaceNotFoundError:
             flash(message="Gara non trovata.", category="warning")
         except Exception as e:
-            logger.error(msg=f"Error deleting race {race_id}: {e}")
+            self.logger.error(f"Error deleting race {race_id}: {e}")
             flash(message="Errore del Server durante la cancellazione della gara.", category="danger")
         return redirect(location=url_for(endpoint=GET_RACES_ENDPOINT))
 
@@ -73,12 +73,12 @@ class RaceController:
                 flash(message=f"Gara '{created_race.name}' creata con successo.", category="success")
 
         except ValidationError as e:
-            logger.warning(msg=f"Pydantic validation error: {e}")
+            self.logger.warning(f"Pydantic validation error: {e}")
             flash(message="Dati della gara invalidi. Controlla i campi del modulo.", category="warning")
         except RaceNotFoundError:
             flash(message="Gara non trovata.", category="warning")
         except Exception as e:
-            logger.error(msg=f"Unexpected error processing race form: {e}")
+            self.logger.error(f"Unexpected error processing race form: {e}")
             flash(message="Errore del Server durante l'operazione.", category="danger")
 
         return redirect(location=url_for(endpoint=GET_RACES_ENDPOINT))
@@ -107,6 +107,6 @@ class RaceController:
             }
 
         except (KeyError, ValueError) as e:
-            logger.warning(msg=f"Form parsing error: {e}")
+            self.logger.warning(f"Form parsing error: {e}")
             abort(400, "Invalid form data")
             raise  # This line is never reached but helps mypy understand abort() doesn't return

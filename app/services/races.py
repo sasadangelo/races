@@ -2,16 +2,14 @@
 # Copyright (c) 2025 Salvatore D'Angelo, Code4Projects
 # Licensed under the MIT License. See LICENSE.md for details.
 # -----------------------------------------------------------------------------
-import logging
 from typing import Any
 
 from sqlalchemy.exc import SQLAlchemyError
 
 from app import db
+from app.core.log import LoggerManager
 from app.dtos import Race  # Pydantic v2 DTO
 from app.models.races import RaceDAO
-
-logger = logging.getLogger(name=__name__)
 
 
 class RaceNotFoundError(Exception):
@@ -23,6 +21,7 @@ class RaceNotFoundError(Exception):
 class RaceService:
     def __init__(self) -> None:
         self.db = db
+        self.logger = LoggerManager.get_logger(self.__class__.__name__)
 
     def get_all_races(self) -> list[Race]:
         """Retrieve all races from the database as Pydantic DTOs."""
@@ -45,10 +44,10 @@ class RaceService:
             if deleted_rows == 0:
                 raise RaceNotFoundError(f"Race with id {race_id} does not exist")
             self.db.session.commit()
-            logger.info(msg=f"Deleted race {race_id}")
+            self.logger.info(f"Deleted race {race_id}")
         except SQLAlchemyError as e:
             self.db.session.rollback()
-            logger.error(msg=f"SQLAlchemy error deleting race {race_id}: {e}")
+            self.logger.error(f"SQLAlchemy error deleting race {race_id}: {e}")
             raise
 
     def create_new_race(self, race: Race) -> Race:
@@ -58,11 +57,11 @@ class RaceService:
             race_dao: RaceDAO = RaceDAO(**data)
             self.db.session.add(instance=race_dao)
             self.db.session.commit()
-            logger.info(msg=f"Created new race '{race.name}' with ID {race_dao.id}")
+            self.logger.info(f"Created new race '{race.name}' with ID {race_dao.id}")
             return Race.model_validate(obj=race_dao)
         except SQLAlchemyError as e:
             self.db.session.rollback()
-            logger.error(msg=f"SQLAlchemy error creating race '{race.name}': {e}")
+            self.logger.error(f"SQLAlchemy error creating race '{race.name}': {e}")
             raise
 
     def update_race(self, race_id: int, race: Race) -> Race:
@@ -77,9 +76,9 @@ class RaceService:
             for field, value in data.items():
                 setattr(race_dao, field, value)
             self.db.session.commit()
-            logger.info(msg=f"Updated race {race_id}")
+            self.logger.info(f"Updated race {race_id}")
             return Race.model_validate(obj=race_dao)
         except SQLAlchemyError as e:
             self.db.session.rollback()
-            logger.error(msg=f"SQLAlchemy error updating race {race_id}: {e}")
+            self.logger.error(f"SQLAlchemy error updating race {race_id}: {e}")
             raise

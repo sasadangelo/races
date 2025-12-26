@@ -36,11 +36,25 @@ class DatabaseConfig(BaseSettings):
     model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(env_prefix="DB_", extra="ignore")
 
 
+class LoggingConfig(BaseSettings):
+    """Logging configuration settings."""
+
+    level: str = Field(default="INFO", description="Log level")
+    console: bool = Field(default=True, description="Enable console logging")
+    file: str | None = Field(default=None, description="Log file path")
+    rotation: str = Field(default="10 MB", description="Log rotation size")
+    retention: str = Field(default="7 days", description="Log retention period")
+    compression: str = Field(default="zip", description="Log compression format")
+
+    model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(env_prefix="LOG_", extra="ignore")
+
+
 class Settings(BaseSettings):
     """Main settings class that combines all configuration sections."""
 
     app: AppConfig
     database: DatabaseConfig
+    logging: LoggingConfig
 
     model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(extra="ignore")
 
@@ -63,6 +77,7 @@ class Settings(BaseSettings):
         return cls(
             app=AppConfig(**config_data.get("app", {})),
             database=DatabaseConfig(**config_data.get("database", {})),
+            logging=LoggingConfig(**config_data.get("logging", {})),
         )
 
     def get_database_uri(self) -> str:

@@ -6,3 +6,11 @@ app:
 
 database:
   relative_path: "instance/dev.db"
+
+logging:
+  level: "INFO"
+  console: true
+  file: "logs/races.log"
+  rotation: "10 MB"
+  retention: "7 days"
+  compression: "zip"
