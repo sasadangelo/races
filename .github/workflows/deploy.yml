@@ -26,6 +26,7 @@ jobs:
           port: 22
           debug: true
           script: |
+            set -x
             # Navigate to project folder
             cd ~/races
 
@@ -35,7 +36,7 @@ jobs:
 
             # Install/update dependencies
             # Force login shell so uv trova la .python-version e la virtualenv corretta
-            bash -l -c "uv sync"
+            uv sync --verbose
 
             # Touch WSGI file to trigger reload
             touch /var/www/sasadangelo_pythonanywhere_com_wsgi.py
