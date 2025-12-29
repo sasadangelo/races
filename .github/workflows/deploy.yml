@@ -37,9 +37,9 @@ jobs:
 
             # Install/update dependencies
             # Force login shell so uv trova la .python-version e la virtualenv corretta
-            uv sync --verbose
+            # uv sync --verbose
 
             # Touch WSGI file to trigger reload
-            touch /var/www/sasadangelo_pythonanywhere_com_wsgi.py
+            # touch /var/www/sasadangelo_pythonanywhere_com_wsgi.py
 
-            echo "✅ Deployment completed!"
+            # echo "✅ Deployment completed!"
