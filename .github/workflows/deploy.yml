@@ -26,7 +26,8 @@ jobs:
           port: 22
           debug: true
           script: |
-            set -x
+            HOME="/home/sasadangelo"
+            export PATH="$HOME/.local/bin:$PATH"
             # Navigate to project folder
             cd ~/races
 
