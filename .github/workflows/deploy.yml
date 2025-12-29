@@ -32,8 +32,8 @@ jobs:
             cd ~/races
 
             # Reset any local changes and pull latest code
-            git reset --hard
-            git pull origin main
+            # git reset --hard
+            # git pull origin main
 
             # Install/update dependencies
             # Force login shell so uv trova la .python-version e la virtualenv corretta
