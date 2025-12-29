@@ -27,7 +27,7 @@ jobs:
           debug: true
           script: |
             HOME="/home/sasadangelo"
-            export PATH="$HOME/.local/bin:$PATH"
+            export PATH="$HOME/.local/bin:/usr/local/bin:$PATH"
             # Navigate to project folder
             cd ~/races
 
