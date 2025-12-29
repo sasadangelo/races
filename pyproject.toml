@@ -59,7 +59,7 @@ exclude = '''
 '''
 include = '\.pyi?$'
 line-length = 120
-target-version = ["py310"]
+target-version = ["py313"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
