@@ -5,7 +5,7 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:   # consente il deploy manuale da GitHub Actions
+  workflow_dispatch: # consente il deploy manuale da GitHub Actions
 
 jobs:
   deploy:
@@ -33,12 +33,8 @@ jobs:
             git reset --hard
             git pull origin main
 
-            # Debug: check python and pip
-            ~/venv/races/bin/python --version
-            ~/venv/races/bin/pip --version
-
-            # Install/update dependencies in virtualenv
-            ~/venv/races/bin/pip install --upgrade -r requirements.txt --disable-pip-version-check -q
+            # Install/update dependencies
+            uv sync
 
             # Touch WSGI file to trigger reload
             touch /var/www/sasadangelo_pythonanywhere_com_wsgi.py
