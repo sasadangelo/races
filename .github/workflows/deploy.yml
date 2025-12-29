@@ -34,7 +34,8 @@ jobs:
             git pull origin main
 
             # Install/update dependencies
-            uv sync
+            # Force login shell so uv trova la .python-version e la virtualenv corretta
+            bash -l -c "uv sync"
 
             # Touch WSGI file to trigger reload
             touch /var/www/sasadangelo_pythonanywhere_com_wsgi.py
