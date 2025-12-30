@@ -4,12 +4,16 @@
 # -----------------------------------------------------------------------------
 import os
 from pathlib import Path
-from typing import ClassVar
+from typing import Any, ClassVar
 
-import yaml
+from dotenv import load_dotenv
 from pydantic import Field
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, PydanticBaseSettingsSource
 from pydantic_settings.main import SettingsConfigDict
+from pydantic_settings.sources import YamlConfigSettingsSource
+
+# Load .env file at module import
+load_dotenv()
 
 
 class AppConfig(BaseSettings):
@@ -20,12 +24,7 @@ class AppConfig(BaseSettings):
     port: int = Field(default=5001, description="Port number")
     secret_key: str | None = Field(default=None, description="Secret key from environment")
 
-    model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(
-        env_prefix="APP_",
-        env_file=".env",
-        env_file_encoding="utf-8",
-        extra="ignore",
-    )
+    model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(extra="ignore")
 
 
 class DatabaseConfig(BaseSettings):
@@ -33,10 +32,10 @@ class DatabaseConfig(BaseSettings):
 
     relative_path: str = Field(default="instance/dev.db", description="Relative path to database")
 
-    model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(env_prefix="DB_", extra="ignore")
+    model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(extra="ignore")
 
 
-class LoggingConfig(BaseSettings):
+class LogConfig(BaseSettings):
     """Logging configuration settings."""
 
     level: str = Field(default="INFO", description="Log level")
@@ -46,7 +45,7 @@ class LoggingConfig(BaseSettings):
     retention: str = Field(default="7 days", description="Log retention period")
     compression: str = Field(default="zip", description="Log compression format")
 
-    model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(env_prefix="LOG_", extra="ignore")
+    model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(extra="ignore")
 
 
 class Settings(BaseSettings):
@@ -54,31 +53,36 @@ class Settings(BaseSettings):
 
     app: AppConfig
     database: DatabaseConfig
-    logging: LoggingConfig
+    log: LogConfig
 
-    model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(extra="ignore")
+    model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(
+        yaml_file="config.yml",
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
 
     @classmethod
-    def from_yaml(cls, config_path: str = "config.yml") -> "Settings":
-        """Load settings from YAML file."""
-        yaml_path: Path = Path(config_path)
-
-        if not yaml_path.exists():
-            raise FileNotFoundError(f"Configuration file not found: {yaml_path}")
-
-        with open(file=yaml_path) as f:
-            config_data = yaml.safe_load(stream=f)
-
-        # Load secret_key from environment
-        secret_key: str | None = os.getenv("SECRET_KEY")
-        if config_data.get("app"):
-            config_data["app"]["secret_key"] = secret_key
-
-        return cls(
-            app=AppConfig(**config_data.get("app", {})),
-            database=DatabaseConfig(**config_data.get("database", {})),
-            logging=LoggingConfig(**config_data.get("logging", {})),
+    def settings_customise_sources(
+        cls,
+        settings_cls: type[BaseSettings],
+        init_settings: PydanticBaseSettingsSource,
+        env_settings: PydanticBaseSettingsSource,
+        dotenv_settings: PydanticBaseSettingsSource,
+        file_secret_settings: PydanticBaseSettingsSource,
+    ) -> tuple[PydanticBaseSettingsSource, ...]:
+        """Customize settings sources: YAML file only."""
+        return (
+            YamlConfigSettingsSource(settings_cls),
+            init_settings,
         )
+
+    def model_post_init(self, __context: Any) -> None:
+        """Load secret_key from environment after initialization."""
+        # Try environment variable first, then .env file
+        secret_key = os.getenv("APP_SECRET_KEY")
+        if secret_key:
+            self.app.secret_key = secret_key
 
     def get_database_uri(self) -> str:
         """Get the full database URI."""
@@ -88,4 +92,4 @@ class Settings(BaseSettings):
 
 
 # Load settings at module import
-settings: Settings = Settings.from_yaml()
+settings: Settings = Settings()  # type: ignore[call-arg]

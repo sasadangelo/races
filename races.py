@@ -21,12 +21,12 @@ def create_app() -> Flask:
     """
     # Initialize logging first
     setup_logging(
-        level=settings.logging.level,
-        console=settings.logging.console,
-        file=settings.logging.file,
-        rotation=settings.logging.rotation,
-        retention=settings.logging.retention,
-        compression=settings.logging.compression,
+        level=settings.log.level,
+        console=settings.log.console,
+        file=settings.log.file,
+        rotation=settings.log.rotation,
+        retention=settings.log.retention,
+        compression=settings.log.compression,
     )
 
     # Create the Flask app

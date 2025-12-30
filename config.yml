@@ -7,7 +7,7 @@ app:
 database:
   relative_path: "instance/dev.db"
 
-logging:
+log:
   level: "INFO"
   console: true
   file: "logs/races.log"
